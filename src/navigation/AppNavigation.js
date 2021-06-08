@@ -25,7 +25,8 @@ export const AppNavigation = () => {
         {/* <Stack.Screen name="Main" component={MainScreen} options={{title: Constants.manifest.name}}/> */}
         <Stack.Screen name="Main" component={MainScreen} options={{title: "React Native demo: Blog"}}/>
         <Stack.Screen name="About" component={AboutScreen} options={{title: "О программе"}}/>
-        <Stack.Screen name="Post" component={PostScreen} options={{title: "Запись"}}/>
+        {/* <Stack.Screen name="Post" component={PostScreen} options={{title: "Запись"}}/> */}
+        <Stack.Screen name="Post" component={PostScreen} options={({route})=>({ title: `Пост #${route.params.postId} - ${new Date(route.params.date).toLocaleDateString()}` })}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
