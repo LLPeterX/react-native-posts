@@ -8,6 +8,8 @@ import { THEME } from '../../theme'
 import { Platform } from 'react-native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { Ionicons } from '@expo/vector-icons'
+import { HeaderButtons, Item } from 'react-navigation-header-buttons'
+import { AppHeaderIcon } from '../components/AppHeaderIcon'
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -26,7 +28,21 @@ export const AppNavigation = () => {
           }
         }
       >
-        <Stack.Screen name="Main" component={BottomNavigator} options={{ title: "React Native demo: Blog" }} />
+        <Stack.Screen
+          name="Main"
+          component={BottomNavigator}
+          options={{
+            title: "Мой блог",
+            headerRight: () =>
+              <HeaderButtons HeaderButtonComponent={AppHeaderIcon}>
+                <Item title="Сделать фото" iconName="camera" onPress={() => console.log('Press photo')} />
+              </HeaderButtons>,
+            headerLeft: () =>
+              <HeaderButtons HeaderButtonComponent={AppHeaderIcon}>
+                <Item title="Меню" iconName="menu" onPress={() => console.log('Press menu')} />
+              </HeaderButtons>
+          }}
+        />
         <Stack.Screen name="About" component={AboutScreen} options={{ title: "О программе" }} />
         <Stack.Screen name="Post" component={PostScreen} options={({ route }) => ({ title: `Пост #${route.params.postId} - ${new Date(route.params.date).toLocaleDateString()}` })} />
       </Stack.Navigator>
@@ -34,17 +50,22 @@ export const AppNavigation = () => {
   );
 };
 
+// этот навигатор - оболочка над MainScreen.
+// использовать будем в Stack, так что без <NavigationContainer>
 const BottomNavigator = () => {
   return (
-    <Tab.Navigator initialRouteName="All" tabBarOptions={{ activeTintColor: THEME.MAIN_COLOR }}>
+    <Tab.Navigator initialRouteName="All"
+      tabBarOptions={{ activeTintColor: THEME.MAIN_COLOR, inactiveTintColor: THEME.INACTIVE_COLOR }}
+    >
+      {/* левая кнопка - "Все". Отображает все данные. По  имени в MainScreen фильтруются компоненты */}
       <Tab.Screen
         name="All"
         component={MainScreen}
-        initialParams={{ isBooked: false }}
         options={
           {
+            title: "Мой блог",
             tabBarLabel: "Все",
-            tabBarIcon: ({ color }) => (<Ionicons name="albums" size={24} color={color} />)
+            tabBarIcon: ({ focused, color }) => (<Ionicons name={"albums" + (focused ? "" : "-outline")} size={24} color={color} />)
           }}
       />
       <Tab.Screen
@@ -52,8 +73,9 @@ const BottomNavigator = () => {
         initialParams={{ isBooked: true }}
         component={MainScreen}
         options={{
+          title: "Избранное",
           tabBarLabel: "Избранное",
-          tabBarIcon: ({ color }) => <Ionicons name="heart-outline" size={24} color={color} />
+          tabBarIcon: ({ focused, color }) => <Ionicons name={focused ? 'heart' : 'heart-outline'} size={24} color={color} />
         }} />
     </Tab.Navigator>
   );
