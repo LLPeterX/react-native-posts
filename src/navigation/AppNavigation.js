@@ -34,24 +34,26 @@ export const AppNavigation = () => {
   );
 };
 
-export const BottomNavigator = () => {
+const BottomNavigator = () => {
   return (
-    <Tab.Navigator initialRouteName="All">
+    <Tab.Navigator initialRouteName="All" tabBarOptions={{ activeTintColor: THEME.MAIN_COLOR }}>
       <Tab.Screen
         name="All"
         component={MainScreen}
+        initialParams={{ isBooked: false }}
         options={
           {
             tabBarLabel: "Все",
-            tabBarIcon: () => (<Ionicons name="albums" size={24} color={THEME.MAIN_COLOR} />)
+            tabBarIcon: ({ color }) => (<Ionicons name="albums" size={24} color={color} />)
           }}
       />
       <Tab.Screen
         name="Booked"
+        initialParams={{ isBooked: true }}
         component={MainScreen}
         options={{
           tabBarLabel: "Избранное",
-          tabBarIcon: () => <Ionicons name="heart-outline" size={24} color={THEME.MAIN_COLOR} />
+          tabBarIcon: ({ color }) => <Ionicons name="heart-outline" size={24} color={color} />
         }} />
     </Tab.Navigator>
   );

@@ -1,7 +1,7 @@
 import React from 'react'
 import {StyleSheet, View, Text} from 'react-native'
 
-export const BookmarkedScreen = ({}) => {
+export const BookedScreen = ({}) => {
   return (
     <View style={styles.center}>
     <Text>BookmarkedScreen</Text>
