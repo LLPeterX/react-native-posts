@@ -28,6 +28,7 @@ export const AppNavigation = () => {
           }
         }
       >
+        {/* Перечень экранов */}
         <Stack.Screen
           name="Main"
           component={BottomNavigator}
@@ -43,21 +44,27 @@ export const AppNavigation = () => {
               </HeaderButtons>
           }}
         />
-        <Stack.Screen name="About" component={AboutScreen} options={{ title: "О программе" }} />
-        <Stack.Screen name="Post" component={PostScreen} options={({ route }) => ({ title: `Пост #${route.params.postId} - ${new Date(route.params.date).toLocaleDateString()}` })} />
+        <Stack.Screen name="About"
+          component={AboutScreen}
+          options={{ title: "О программе" }}
+        />
+        <Stack.Screen name="Post"
+          component={PostScreen}
+          options={({ route }) => ({ title: `Пост #${route.params.postId} - ${new Date(route.params.date).toLocaleDateString()}` })}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
 };
 
-// этот навигатор - оболочка над MainScreen.
+// этот навигатор - оболочка над MainScreen с табами.
 // использовать будем в Stack, так что без <NavigationContainer>
 const BottomNavigator = () => {
   return (
     <Tab.Navigator initialRouteName="All"
       tabBarOptions={{ activeTintColor: THEME.MAIN_COLOR, inactiveTintColor: THEME.INACTIVE_COLOR }}
     >
-      {/* левая кнопка - "Все". Отображает все данные. По  имени в MainScreen фильтруются компоненты */}
+      {/* левая кнопка - "Все". Отображает все данные. По Tab.Screen.name в MainScreen фильтруются компоненты */}
       <Tab.Screen
         name="All"
         component={MainScreen}
@@ -68,6 +75,7 @@ const BottomNavigator = () => {
             tabBarIcon: ({ focused, color }) => (<Ionicons name={"albums" + (focused ? "" : "-outline")} size={24} color={color} />)
           }}
       />
+      {/* Правая кнопка - отображаем отфильтрованные данные с booked=true */}
       <Tab.Screen
         name="Booked"
         initialParams={{ isBooked: true }}
