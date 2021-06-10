@@ -1,21 +1,24 @@
 import React from 'react'
-import { NavigationContainer } from '@react-navigation/native'
+import { NavigationContainer, useNavigation } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 import { AboutScreen } from '../screens/AboutScreen';
 import { MainScreen } from '../screens/MainScreen';
 import { PostScreen } from '../screens/PostScreen';
+import { CreateScreen } from '../screens/CreateScreen'
 import { THEME } from '../../theme'
 import { Platform } from 'react-native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { Ionicons } from '@expo/vector-icons'
 import { HeaderButtons, Item } from 'react-navigation-header-buttons'
 import { AppHeaderIcon } from '../components/AppHeaderIcon'
+import { createDrawerNavigator } from '@react-navigation/drawer'
+import { DrawerActions } from '@react-navigation/native'
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
+const Drawer = createDrawerNavigator();
 
 export const AppNavigation = () => {
-
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Main"
@@ -31,23 +34,27 @@ export const AppNavigation = () => {
         {/* Перечень экранов */}
         <Stack.Screen
           name="Main"
-          component={BottomNavigator}
+          component={DrawerNavigator}
           options={{
             title: "Мой блог",
             headerRight: () =>
               <HeaderButtons HeaderButtonComponent={AppHeaderIcon}>
                 <Item title="Сделать фото" iconName="camera" onPress={() => console.log('Press photo')} />
               </HeaderButtons>,
-            headerLeft: () =>
-              <HeaderButtons HeaderButtonComponent={AppHeaderIcon}>
-                <Item title="Меню" iconName="menu" onPress={() => console.log('Press menu')} />
-              </HeaderButtons>
+            headerLeft: () => {
+              const navigation = useNavigation();
+              return (
+                <HeaderButtons HeaderButtonComponent={AppHeaderIcon}>
+                  <Item title="Меню" iconName="menu" onPress={() => navigation.dispatch(DrawerActions.openDrawer())} />
+                </HeaderButtons>
+              );
+            }
           }}
         />
-        <Stack.Screen name="About"
+        {/* <Stack.Screen name="About"
           component={AboutScreen}
           options={{ title: "О программе" }}
-        />
+        /> */}
         <Stack.Screen name="Post"
           component={PostScreen}
           options={({ route }) => ({ title: `Пост #${route.params.postId} - ${new Date(route.params.date).toLocaleDateString()}` })}
@@ -88,3 +95,14 @@ const BottomNavigator = () => {
     </Tab.Navigator>
   );
 }
+
+
+const DrawerNavigator = () => {
+  return (
+    <Drawer.Navigator initialRouteName="DrawMain">
+      <Drawer.Screen name="DrawMain" component={BottomNavigator} options={{ title: "Главная страница" }} />
+      <Drawer.Screen name="DrawCreate" component={CreateScreen} options={{ title: "Создать пост" }} />
+      <Drawer.Screen name="DrawAbout" component={AboutScreen} options={{ title: "О программе" }} />
+    </Drawer.Navigator>
+  );
+};
