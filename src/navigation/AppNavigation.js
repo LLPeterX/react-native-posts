@@ -45,7 +45,7 @@ export const AppNavigation = () => {
               const navigation = useNavigation();
               return (
                 <HeaderButtons HeaderButtonComponent={AppHeaderIcon}>
-                  <Item title="Меню" iconName="menu" onPress={() => navigation.dispatch(DrawerActions.openDrawer())} />
+                  <Item title="Меню" iconName="menu" onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())} />
                 </HeaderButtons>
               );
             }
