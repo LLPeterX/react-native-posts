@@ -1,10 +1,13 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import {StyleSheet, View, Text} from 'react-native'
 
-export const CreateScreen = ({}) => {
+export const CreateScreen = ({ navigation, route }) => {
+  
+  useEffect(()=>navigation.setOptions({title: "Создать запись"}),[]);
+
   return (
     <View style={styles.center}>
-    <Text>CreateScreen</Text>
+    <Text>Create Screen</Text>
     </View>
   );
 };

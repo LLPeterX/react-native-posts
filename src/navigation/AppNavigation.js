@@ -37,10 +37,12 @@ export const AppNavigation = () => {
           component={DrawerNavigator}
           options={{
             title: "Мой блог",
-            headerRight: () =>
-              <HeaderButtons HeaderButtonComponent={AppHeaderIcon}>
-                <Item title="Сделать фото" iconName="camera" onPress={() => console.log('Press photo')} />
-              </HeaderButtons>,
+            headerRight: () => {
+              const navigation = useNavigation();
+              return <HeaderButtons HeaderButtonComponent={AppHeaderIcon}>
+                <Item title="Сделать фото" iconName="camera" onPress={() => navigation.push('Create')} />
+              </HeaderButtons>
+            },
             headerLeft: () => {
               const navigation = useNavigation();
               return (
@@ -58,6 +60,10 @@ export const AppNavigation = () => {
         <Stack.Screen name="Post"
           component={PostScreen}
           options={({ route }) => ({ title: `Пост #${route.params.postId} - ${new Date(route.params.date).toLocaleDateString()}` })}
+        />
+        <Stack.Screen name="Create"
+          component={CreateScreen}
+          options={({ route }) => ({ title: "Новый пост" })}
         />
       </Stack.Navigator>
     </NavigationContainer>
@@ -96,13 +102,32 @@ const BottomNavigator = () => {
   );
 }
 
-
+// меню навигации. Открывается свайпом слева направо или по клику на кнопку "меню"
 const DrawerNavigator = () => {
   return (
-    <Drawer.Navigator initialRouteName="DrawMain">
-      <Drawer.Screen name="DrawMain" component={BottomNavigator} options={{ title: "Главная страница" }} />
-      <Drawer.Screen name="DrawCreate" component={CreateScreen} options={{ title: "Создать пост" }} />
-      <Drawer.Screen name="DrawAbout" component={AboutScreen} options={{ title: "О программе" }} />
+    <Drawer.Navigator initialRouteName="DrawMain" screenOptions={{ fontFamily: 'open-bold' }} >
+      <Drawer.Screen
+        name="DrawMain"
+        component={BottomNavigator}
+        options={{
+          title: "Главная страница",
+          drawerIcon: ({ focused, color }) => <Ionicons name={"arrow-undo" + (focused ? "" : "-circle")} size={20} color={color} />
+        }}
+      />
+      <Drawer.Screen
+        name="DrawCreate" component={CreateScreen}
+        options={
+          {
+            title: "Создать пост",
+            drawerIcon: ({ focused, color }) => <Ionicons name={"add" + (focused ? "" : "-outline")} size={20} color={color} />
+          }
+        }
+      />
+      <Drawer.Screen name="DrawAbout" component={AboutScreen}
+        options={{
+          title: "О программе",
+          drawerIcon: ({ focused, color }) => <Ionicons name={"help" + (focused ? "" : "-outline")} size={20} color={color} />
+        }} />
     </Drawer.Navigator>
   );
 };
