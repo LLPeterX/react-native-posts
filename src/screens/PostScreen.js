@@ -1,25 +1,48 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { StyleSheet, View, Text, Image, Button, ScrollView, Alert } from 'react-native'
 import { THEME } from '../../theme';
 import { DATA } from '../data';
 import { AppHeaderIcon } from '../components/AppHeaderIcon'
 import { HeaderButtons, Item } from 'react-navigation-header-buttons'
-
+import { useDispatch, useSelector } from 'react-redux'
+import { toggleBooked } from '../store/actions/post_actions'
 
 export const PostScreen = ({ navigation, route }) => {
+  const dispatch = useDispatch();
+
   const postId = route.params.postId;
   const post = DATA.find(d => d.id === postId);
 
-  const iconName = post.booked ? "star" : "star-outline";
+  const getIconName = (isBooked) =>  isBooked ? "heart-outline" : "heart";
+  
+  const [iconName, setIconName] = useState(getIconName(post.booked));
 
-  useEffect(() => navigation.setOptions({
-    headerRight: () =>
-      <HeaderButtons HeaderButtonComponent={AppHeaderIcon}>
-        <Item title="Favorite" iconName={iconName} onPress={() => console.log('Press star')} />
-      </HeaderButtons>
+  const bookedHandler = () => {
+    console.log('handler before: ', post.id, post.booked);
+    dispatch(toggleBooked(postId));
+    post.booked = !post.booked;
+    setIconName(getIconName(post.booked));
+    updateHeader(getIconName(post.booked));
+    console.log('handler after: ', post.id, post.booked);
+    
+  };
 
-  }),
-    []);
+  const updateHeader = (iconName) => {
+    console.log('call updateHeader with',iconName);
+    navigation.setOptions({
+      headerRight: () =>
+        <HeaderButtons HeaderButtonComponent={AppHeaderIcon}>
+          <Item title="Favorite"
+            iconName={iconName}
+            onPress={bookedHandler}
+            />
+        </HeaderButtons>
+  
+    })
+  };
+
+  useEffect(() => updateHeader(iconName),
+    [route]);
 
   const removeHandler = () => {
     Alert.alert("Удаление", "Вы хотите удалить пост?",

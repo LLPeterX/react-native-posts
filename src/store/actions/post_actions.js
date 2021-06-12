@@ -1,4 +1,4 @@
-import { LOAD_POSTS } from '../action_types'
+import { LOAD_POSTS, TOGGLE_BOOKED } from '../action_types'
 import { DATA } from '../../data'
 
 // action creators for Posts list (on MainScreen)
@@ -9,3 +9,6 @@ export const loadPosts = () => {
   });
 };
 
+export const toggleBooked = (id) => {
+  return ({type: TOGGLE_BOOKED, payload: id} );
+};
