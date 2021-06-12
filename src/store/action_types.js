@@ -1,0 +1,3 @@
+export const LOAD_POSTS = 'LOAD_POSTS'
+//export const LOAD_BOOKED_POSTS = 'LOAD_BOOKED_POSTS'
+

@@ -1,21 +1,29 @@
 import React, { useEffect } from 'react'
 import { StyleSheet, View, FlatList } from 'react-native'
-import { DATA } from '../data'
 import { Post } from '../components/Post'
+import { useDispatch, useSelector } from 'react-redux'
+import { loadPosts } from '../store/actions/post_actions';
 
 export const MainScreen = ({ navigation, route }) => {
   const openPostHandler = (post) => {
     navigation.navigate('Post', { postId: post.id, date: post.date, booked: post.booked });
   }
 
-  // route.name берем из Tab.Screen
-  const data = route.name === 'All' ? DATA : DATA.filter(d => d.booked);
+
+  //const data = route.name === 'All' ? DATA : DATA.filter(d => d.booked);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(loadPosts());
+   }, [route.name]);
+
+  const posts = useSelector((store)=>route.name === 'All' ? store.post.allPosts : store.post.bookedPosts);
 
   return (
     <View style={styles.wrapper}>
       <FlatList
         style={styles.list}
-        data={data}
+        data={posts}
         renderItem={({ item }) => <Post post={item} onOpen={openPostHandler} />}
         keyExtractor={item => item.id.toString()}
       />
