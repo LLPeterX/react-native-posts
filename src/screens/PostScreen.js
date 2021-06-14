@@ -12,9 +12,12 @@ export const PostScreen = ({ navigation, route }) => {
 
   const postId = route.params.postId;
   const post = DATA.find(d => d.id === postId);
-
+  if(!post) {
+    return null;
+  }
   // локальный стейт для иконки избранного (booked)
-  let [isBooked, setIsBooked] = useState(post.booked)
+  // тут засада - post.booked может быть не определен
+  let [isBooked, setIsBooked] = useState(!!post?.booked)
 
   const toggleBookedHandler = () => {
     dispatch(toggleBooked(postId));
