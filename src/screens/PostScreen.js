@@ -4,8 +4,8 @@ import { THEME } from '../../theme';
 import { DATA } from '../data';
 import { AppHeaderIcon } from '../components/AppHeaderIcon'
 import { HeaderButtons, Item } from 'react-navigation-header-buttons'
-import { useDispatch, useSelector } from 'react-redux'
-import { toggleBooked } from '../store/actions/post_actions'
+import { useDispatch } from 'react-redux'
+import { deletePost, toggleBooked } from '../store/actions/post_actions'
 
 export const PostScreen = ({ navigation, route }) => {
   const dispatch = useDispatch();
@@ -13,7 +13,7 @@ export const PostScreen = ({ navigation, route }) => {
   const postId = route.params.postId;
   const post = DATA.find(d => d.id === postId);
 
-  // local state for heart color (booked)
+  // локальный стейт для иконки избранного (booked)
   let [isBooked, setIsBooked] = useState(post.booked)
 
   const toggleBookedHandler = () => {
@@ -39,7 +39,7 @@ export const PostScreen = ({ navigation, route }) => {
     })
   };
 
-  
+  // обновить шапку с иконкой при изменении isBooked
   useEffect(() => updateHeader(isBooked),  [isBooked]);
   
   const removeHandler = () => {
@@ -47,7 +47,10 @@ export const PostScreen = ({ navigation, route }) => {
       [
         {
           text: "Да", style: 'destructive',
-          onPress: () => console.log('Yes, delete it!')
+          onPress: () => {
+            dispatch(deletePost(postId));
+            navigation.goBack();
+          }
         },
         { text: "Нет", style: 'cancel' }
       ],
