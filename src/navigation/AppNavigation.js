@@ -59,7 +59,10 @@ export const AppNavigation = () => {
         /> */}
         <Stack.Screen name="Post"
           component={PostScreen}
-          options={({ route }) => ({ title: `Пост #${route.params.postId} - ${new Date(route.params.date).toLocaleDateString()}` })}
+          options={({ route }) => ({ 
+            title: `Пост #${route.params.postId} - ${new Date(route.params.date).toLocaleDateString()}`,
+            headerTitleStyle: {fontSize: 18} 
+          })}
         />
         <Stack.Screen name="Create"
           component={CreateScreen}
