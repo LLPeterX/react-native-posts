@@ -13,37 +13,35 @@ export const PostScreen = ({ navigation, route }) => {
   const postId = route.params.postId;
   const post = DATA.find(d => d.id === postId);
 
-  const getIconName = (isBooked) =>  isBooked ? "heart-outline" : "heart";
-  
-  const [iconName, setIconName] = useState(getIconName(post.booked));
+  // local state for heart color (booked)
+  let [isBooked, setIsBooked] = useState(post.booked)
 
-  const bookedHandler = () => {
-    console.log('handler before: ', post.id, post.booked);
+  const toggleBookedHandler = () => {
     dispatch(toggleBooked(postId));
-    post.booked = !post.booked;
-    setIconName(getIconName(post.booked));
-    updateHeader(getIconName(post.booked));
-    console.log('handler after: ', post.id, post.booked);
-    
+    setIsBooked(!isBooked);
   };
 
-  const updateHeader = (iconName) => {
-    console.log('call updateHeader with',iconName);
+  // заголовок с кнопкой "Избранное". По клику на кнопку вызываем переключение сердечка
+  const updateHeader = (isBooked) => {
+    const iconName = isBooked ? "heart" : "heart-outline";
+    const iconColor = isBooked ? '#bd4695' : THEME.MAIN_COLOR;
     navigation.setOptions({
       headerRight: () =>
         <HeaderButtons HeaderButtonComponent={AppHeaderIcon}>
           <Item title="Favorite"
             iconName={iconName}
-            onPress={bookedHandler}
+            onPress={toggleBookedHandler}
+            iconColor = {iconColor}
+            color = {iconColor}
             />
         </HeaderButtons>
   
     })
   };
 
-  useEffect(() => updateHeader(iconName),
-    [route]);
-
+  
+  useEffect(() => updateHeader(isBooked),  [isBooked]);
+  
   const removeHandler = () => {
     Alert.alert("Удаление", "Вы хотите удалить пост?",
       [

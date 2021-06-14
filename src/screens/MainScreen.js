@@ -17,7 +17,7 @@ export const MainScreen = ({ navigation, route }) => {
     dispatch(loadPosts());
    }, [route.name]);
 
-  const posts = useSelector((store)=>route.name === 'All' ? store.post.allPosts : store.post.bookedPosts);
+  const posts = useSelector((state)=>route.name === 'All' ? state.post.allPosts : state.post.bookedPosts);
 
   return (
     <View style={styles.wrapper}>

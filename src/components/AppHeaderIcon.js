@@ -6,11 +6,15 @@ import { Ionicons } from '@expo/vector-icons'
 
 
 export const AppHeaderIcon = (props) => {
+  let color = props.color;
+  if(!color) {
+    color = Platform.OS === 'android' ? '#fff' : THEME.MAIN_COLOR;
+  }
   return (
     <HeaderButton
       {...props}
       iconSize={24}
-      color={Platform.OS === 'android' ? '#fff' : THEME.MAIN_COLOR}
+      color={color}
       IconComponent={Ionicons}
     />
   );
