@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import { useDispatch } from 'react-redux';
 import { StyleSheet, View, Text, TextInput, Image, Button, ScrollView, Keyboard } from 'react-native'
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
@@ -12,17 +12,17 @@ export const CreateScreen = ({ navigation, route }) => {
   //useEffect(() => navigation.setOptions({ title: "Создать запись" }), []);
 
   let [text, setText] = useState("");
+  const imgRef = useRef();
 
   const dispatch = useDispatch();
 
-  // temp var for simplify code
-  const img = 'https://cdn.londonandpartners.com/visit/general-london/areas/river/76709-640x360-houses-of-parliament-and-london-eye-on-thames-from-above-640.jpg';
+  //let img = 'https://cdn.londonandpartners.com/visit/general-london/areas/river/76709-640x360-houses-of-parliament-and-london-eye-on-thames-from-above-640.jpg';
 
   const savePostHandler = () => {
     // create new post object then call dispatch to save
     const post = {
       id: Date.now().toString(),
-      img,
+      img: imgRef.current,
       text,
       date: new Date().toJSON(),
       booked: false
@@ -30,6 +30,10 @@ export const CreateScreen = ({ navigation, route }) => {
     dispatch(createPost(post));
     //navigation.goBack();
     navigation.navigate('Main');
+  };
+
+  const imagePickHandler = (uri) => {
+     imgRef.current = uri
   };
 
   return (
@@ -46,7 +50,7 @@ export const CreateScreen = ({ navigation, route }) => {
           />
           {/* temp component for photo */}
           {/* <Image source={{ uri: img }} style={styles.image} /> */}
-          <PhotoPicker />
+          <PhotoPicker onPick={imagePickHandler}/>
           {/* ------------------------ */}
           <View style={styles.btn}>
             <Button title="Создать пост" color={THEME.MAIN_COLOR} onPress={savePostHandler} />
