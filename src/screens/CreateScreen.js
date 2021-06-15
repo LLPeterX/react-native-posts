@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react'
 import { useDispatch } from 'react-redux';
-import { StyleSheet, View, Text, TextInput, Image, Button, ScrollView, Keyboard } from 'react-native'
+import { StyleSheet, View, Text, TextInput, Button, ScrollView, Keyboard } from 'react-native'
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { THEME } from '../../theme'
 import { createPost } from '../store/actions/post_actions'
@@ -16,8 +16,6 @@ export const CreateScreen = ({ navigation, route }) => {
 
   const dispatch = useDispatch();
 
-  //let img = 'https://cdn.londonandpartners.com/visit/general-london/areas/river/76709-640x360-houses-of-parliament-and-london-eye-on-thames-from-above-640.jpg';
-
   const savePostHandler = () => {
     // create new post object then call dispatch to save
     const post = {
@@ -28,12 +26,11 @@ export const CreateScreen = ({ navigation, route }) => {
       booked: false
     }
     dispatch(createPost(post));
-    //navigation.goBack();
     navigation.navigate('Main');
   };
 
   const imagePickHandler = (uri) => {
-     imgRef.current = uri
+    imgRef.current = uri
   };
 
   return (
@@ -48,12 +45,14 @@ export const CreateScreen = ({ navigation, route }) => {
             value={text}
             onChangeText={setText}
           />
-          {/* temp component for photo */}
-          {/* <Image source={{ uri: img }} style={styles.image} /> */}
-          <PhotoPicker onPick={imagePickHandler}/>
-          {/* ------------------------ */}
+          <PhotoPicker onPick={imagePickHandler} />
           <View style={styles.btn}>
-            <Button title="Создать пост" color={THEME.MAIN_COLOR} onPress={savePostHandler} />
+            <Button
+              title="Создать пост"
+              color={THEME.MAIN_COLOR}
+              onPress={savePostHandler}
+              disabled={!text && !imgRef.current}
+            />
           </View>
           <View style={styles.btn}>
             <Button title="Отмена" color={THEME.INACTIVE_COLOR} onPress={() => navigation.goBack()} />

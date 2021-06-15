@@ -5,7 +5,7 @@ import * as ImagePicker from 'expo-image-picker'
 
 export const PhotoPicker = ({ onPick }) => {
   const [image, setImage] = useState(null); // for image
-  const [media, setMedia] = useState({ library: true, camera: true }); // permissions
+  const [permissions, setPermissions] = useState({ library: true, camera: true }); // permissions
 
   // get permissions for midia library
   useEffect(() => {
@@ -14,7 +14,7 @@ export const PhotoPicker = ({ onPick }) => {
         const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
         if (status !== 'granted') {
           Alert.alert('Нет прав', 'Нет прав на библиотеку изображений');
-          setMedia({ ...media, library: false });
+          setPermissions({ ...permissions, library: false });
         }
       }
     })();
@@ -27,7 +27,7 @@ export const PhotoPicker = ({ onPick }) => {
         const { status } = await ImagePicker.requestCameraPermissionsAsync();
         if (status !== 'granted') {
           Alert.alert('Нет прав', 'нет прав на камеру');
-          setMedia({ ...media, camera: false });
+          setPermissions({ ...permissions, camera: false });
         }
       }
     })();
@@ -45,19 +45,16 @@ export const PhotoPicker = ({ onPick }) => {
       setImage(result.uri);
       onPick(result.uri);
     }
-    console.log(result);
   }; // getPhoto
 
   // берем картинку с камеры смартфона
   const takePhoto = async () => {
-    console.log('call takePhoto()');
     let result = await ImagePicker.launchCameraAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: false,
       aspect: [4, 3],
       quality: 1,
     });
-    console.log('takePhoto() presult=', result);
     if (!result.cancelled) {
       setImage(result.uri);
       onPick(result.uri);
@@ -65,12 +62,12 @@ export const PhotoPicker = ({ onPick }) => {
   }; // takePhoto
 
 
-  // если нет каких-то празрешений, каринку скрываем.
-  // для отступа оборачиваем в <View></View>
+  // если нет каких-то празрешений, скрываем кнопки.
+  // для отступа между кнопками оборачиваем их в <View> со стилями
   return (
     <View style={styles.wrapper}>
-      {media.library && <View style={styles.btn}><Button title="Выбрать фото" onPress={getPhoto} /></View>}
-      {media.camera && <View style={styles.btn}><Button title="Сделать фото" onPress={takePhoto} /></View>}
+      {permissions.library && <View style={styles.btn}><Button title="Выбрать фото" onPress={getPhoto} /></View>}
+      {permissions.camera && <View style={styles.btn}><Button title="Сделать фото" onPress={takePhoto} /></View>}
       {image && <Image source={{ uri: image }} style={styles.image} />}
     </View>
   );
