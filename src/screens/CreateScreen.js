@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { useDispatch } from 'react-redux';
 import { StyleSheet, View, Text, TextInput, Image, Button, ScrollView, Keyboard } from 'react-native'
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
@@ -8,7 +8,7 @@ import { createPost } from '../store/actions/post_actions'
 export const CreateScreen = ({ navigation, route }) => {
 
   // меняем заголовок в useEffect, т.к. сюда попадаем из разных мест из AppMavigation
-  useEffect(() => navigation.setOptions({ title: "Создать запись" }), []);
+  //useEffect(() => navigation.setOptions({ title: "Создать запись" }), []);
 
   let [text, setText] = useState("");
 
@@ -18,6 +18,7 @@ export const CreateScreen = ({ navigation, route }) => {
   const img = 'https://cdn.londonandpartners.com/visit/general-london/areas/river/76709-640x360-houses-of-parliament-and-london-eye-on-thames-from-above-640.jpg';
 
   const savePostHandler = () => {
+    // create new post object then call dispatch to save
     const post = {
       id: Date.now().toString(),
       img,
@@ -25,13 +26,14 @@ export const CreateScreen = ({ navigation, route }) => {
       date: new Date().toJSON(),
       booked: false
     }
-    console.log('Crate post!!!');
     dispatch(createPost(post));
-    navigation.goBack();
+    //navigation.goBack();
+    navigation.navigate('Main');
   };
 
   return (
     <ScrollView>
+      {/* Скрыть клавиатуру при нажатии за пределами поля ввода */}
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
         <View style={styles.wrapper}>
           <Text style={styles.title}>Введите текст нового поста</Text>
@@ -43,7 +45,13 @@ export const CreateScreen = ({ navigation, route }) => {
           />
           {/* temp component for photo */}
           <Image source={{ uri: img }} style={styles.image} />
-          <Button title="Создать пост" color={THEME.MAIN_COLOR} onPress={savePostHandler} />
+          {/* ------------------------ */}
+          <View style={styles.btn}>
+            <Button title="Создать пост" color={THEME.MAIN_COLOR} onPress={savePostHandler} />
+          </View>
+          <View style={styles.btn}>
+            <Button title="Отмена" color={THEME.INACTIVE_COLOR} onPress={() => navigation.goBack()} />
+          </View>
         </View>
       </TouchableWithoutFeedback>
     </ScrollView>
@@ -67,6 +75,9 @@ const styles = StyleSheet.create({
   image: {
     width: "100%",
     height: 200,
+    marginBottom: 20
+  },
+  btn: {
     marginBottom: 20
   }
 });

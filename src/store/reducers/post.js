@@ -23,7 +23,6 @@ export const postReducer = (state = initialState, action) => {
         bookedPosts: state.bookedPosts.filter(b => b.id!=action.payload)
       }  
     case CREATE_POST:
-      console.log('new state:',{...state,  allPosts: [{...action.payload}, ...state.allPosts] });
       return {...state,  allPosts: [{...action.payload}, ...state.allPosts] }  
     default:
       return state; // default value
