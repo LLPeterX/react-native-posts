@@ -4,6 +4,7 @@ import { StyleSheet, View, Text, TextInput, Image, Button, ScrollView, Keyboard 
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { THEME } from '../../theme'
 import { createPost } from '../store/actions/post_actions'
+import { PhotoPicker } from '../components/PhotoPicker';
 
 export const CreateScreen = ({ navigation, route }) => {
 
@@ -44,7 +45,8 @@ export const CreateScreen = ({ navigation, route }) => {
             onChangeText={setText}
           />
           {/* temp component for photo */}
-          <Image source={{ uri: img }} style={styles.image} />
+          {/* <Image source={{ uri: img }} style={styles.image} /> */}
+          <PhotoPicker />
           {/* ------------------------ */}
           <View style={styles.btn}>
             <Button title="Создать пост" color={THEME.MAIN_COLOR} onPress={savePostHandler} />
