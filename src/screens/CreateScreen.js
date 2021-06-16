@@ -6,7 +6,7 @@ import { THEME } from '../../theme'
 import { createPost } from '../store/actions/post_actions'
 import { PhotoPicker } from '../components/PhotoPicker';
 
-export const CreateScreen = ({ navigation, route }) => {
+export const CreateScreen = ({ navigation /*, route */ }) => {
 
   // меняем заголовок в useEffect, т.к. сюда попадаем из разных мест из AppMavigation
   //useEffect(() => navigation.setOptions({ title: "Создать запись" }), []);
