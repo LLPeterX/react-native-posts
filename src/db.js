@@ -16,4 +16,17 @@ export class DB {
     })
   }
 
+  static getPosts() {
+    return new Promise((resolve, reject) => {
+      db.transaction((tx) => {
+        tx.executeSql(
+          'SELECT * FROM posts', //sql
+          [], // arguments
+          (_, result) => resolve(result.rows._array), // callback from promise with array of items
+          (_, error) => reject(error) // callback from promise
+        );
+      });
+    })
+  }
+
 } // class DB

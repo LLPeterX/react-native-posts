@@ -1,11 +1,13 @@
+import { DB } from '../../db';
 import { CREATE_POST, DELETE_POST, LOAD_POSTS, TOGGLE_BOOKED } from '../action_types'
 
 // action creators for Posts list (on MainScreen)
 export const loadPosts = () => {
-  return ({
-    type: LOAD_POSTS,
-    payload: []
-  });
+  return async (dispatch) => {
+    const posts = await DB.getPosts();
+    console.log('post_action: posts=',posts);
+    dispatch({type: LOAD_POSTS, payload: posts});
+  }
 };
 
 export const toggleBooked = (id) => {
