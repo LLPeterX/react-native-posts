@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react'
-import { StyleSheet, View, FlatList } from 'react-native'
+import { StyleSheet, View, FlatList, Text } from 'react-native'
 import { Post } from '../components/Post'
 import { useDispatch, useSelector } from 'react-redux'
-import { loadPosts } from '../store/actions/post_actions';
+import { loadPosts } from '../store/actions/post_actions'
+import { THEME } from '../../theme'
 
 export const MainScreen = ({ navigation, route }) => {
   const openPostHandler = (post) => {
@@ -15,9 +16,14 @@ export const MainScreen = ({ navigation, route }) => {
 
   useEffect(() => {
     dispatch(loadPosts());
-   }, [route.name]);
+  }, [route.name]);
 
-  const posts = useSelector((state)=>route.name === 'All' ? state.post.allPosts : state.post.bookedPosts);
+  const posts = useSelector((state) => route.name === 'All' ? state.post.allPosts : state.post.bookedPosts);
+  if (posts.length === 0) {
+    return <View style={styles.textWrapper}>
+      <Text style={styles.text}>Список пуст</Text>
+    </View>;
+  }
 
   return (
     <View style={styles.wrapper}>
@@ -34,5 +40,14 @@ export const MainScreen = ({ navigation, route }) => {
 const styles = StyleSheet.create({
   wrapper: {
     padding: 10
+  },
+  textWrapper: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    flex: 1
+  },
+  text: {
+    fontFamily: 'open-bold',
+    color: THEME.INACTIVE_COLOR
   }
 });

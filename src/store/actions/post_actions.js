@@ -1,11 +1,10 @@
 import { CREATE_POST, DELETE_POST, LOAD_POSTS, TOGGLE_BOOKED } from '../action_types'
-import { DATA } from '../../data'
 
 // action creators for Posts list (on MainScreen)
 export const loadPosts = () => {
   return ({
     type: LOAD_POSTS,
-    payload: DATA
+    payload: []
   });
 };
 

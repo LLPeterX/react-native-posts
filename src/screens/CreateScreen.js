@@ -32,7 +32,7 @@ export const CreateScreen = ({ navigation, route }) => {
   const imagePickHandler = (uri) => {
     imgRef.current = uri
   };
-
+  console.log('text=',text,'imgCurrent=',imgRef.current);
   return (
     <ScrollView>
       {/* Скрыть клавиатуру при нажатии за пределами поля ввода */}
@@ -51,7 +51,7 @@ export const CreateScreen = ({ navigation, route }) => {
               title="Создать пост"
               color={THEME.MAIN_COLOR}
               onPress={savePostHandler}
-              disabled={!text && !imgRef.current}
+              disabled={!text || !imgRef.current}
             />
           </View>
           <View style={styles.btn}>
