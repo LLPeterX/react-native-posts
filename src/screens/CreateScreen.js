@@ -19,7 +19,7 @@ export const CreateScreen = ({ navigation /*, route */ }) => {
   const savePostHandler = () => {
     // create new post object then call dispatch to save
     const post = {
-      id: Date.now().toString(),
+      //id: Date.now().toString(),
       img: imgRef.current,
       text,
       date: new Date().toJSON(),
@@ -32,7 +32,6 @@ export const CreateScreen = ({ navigation /*, route */ }) => {
   const imagePickHandler = (uri) => {
     imgRef.current = uri
   };
-  console.log('text=',text,'imgCurrent=',imgRef.current);
   return (
     <ScrollView>
       {/* Скрыть клавиатуру при нажатии за пределами поля ввода */}
@@ -51,7 +50,7 @@ export const CreateScreen = ({ navigation /*, route */ }) => {
               title="Создать пост"
               color={THEME.MAIN_COLOR}
               onPress={savePostHandler}
-              disabled={!text || !imgRef.current}
+              disabled={!text?.length && !imgRef.current}
             />
           </View>
           <View style={styles.btn}>

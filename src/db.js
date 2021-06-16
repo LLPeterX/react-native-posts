@@ -29,4 +29,17 @@ export class DB {
     })
   }
 
+  static createPost({img, text, date}) {
+    return new Promise((resolve, reject) => {
+      db.transaction((tx) => {
+        tx.executeSql(
+          'INSERT INTO posts (img, text, date, 0) VALUES (?,?,?)',
+          [img, text, date], // arguments
+          (_, result) => resolve(result.insertId), // callback from promise with array of items
+          (_, error) => reject(error) // callback from promise
+        );
+      });
+    })
+  }
+
 } // class DB
