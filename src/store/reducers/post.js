@@ -2,7 +2,8 @@ import { DELETE_POST, LOAD_POSTS, TOGGLE_BOOKED, CREATE_POST } from '../action_t
 
 const initialState = {
   allPosts: [],
-  bookedPosts: []
+  bookedPosts: [],
+  loading: true
 };
 
 export const postReducer = (state = initialState, action) => {
@@ -11,7 +12,7 @@ export const postReducer = (state = initialState, action) => {
       if(!action.payload) {
         return state;
       }
-      return { ...state, allPosts: action.payload, bookedPosts: action.payload.filter(p => p.booked) };
+      return { ...state, allPosts: action.payload, bookedPosts: action.payload.filter(p => p.booked), loading: false };
     case TOGGLE_BOOKED:
       {
         let allPosts = state.allPosts.map(post => {
