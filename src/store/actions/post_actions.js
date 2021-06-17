@@ -11,17 +11,23 @@ import * as FileSystem from "expo-file-system";
 export const loadPosts = () => {
   return async (dispatch) => {
     const posts = await DB.getPosts();
-//    console.log("post_action: posts=", posts);
+    //    console.log("post_action: posts=", posts);
     dispatch({ type: LOAD_POSTS, payload: posts });
   };
 };
 
-export const toggleBooked = (id) => {
-  return { type: TOGGLE_BOOKED, payload: id };
+export const toggleBooked = (post) => {
+  return async (dispatch) => {
+    await DB.updatePost(post);
+    dispatch({ type: TOGGLE_BOOKED, payload: post.id });
+  }
 };
 
 export const deletePost = (id) => {
-  return { type: DELETE_POST, payload: id };
+  return async (dispatch) => {
+    await DB.deletePost(id);
+    dispatch({ type: DELETE_POST, payload: id });
+  }
 };
 
 export const createPost = (post) => async (dispatch) => {
@@ -39,9 +45,9 @@ export const createPost = (post) => async (dispatch) => {
     }
     payload = { ...post, img: newImgPath };
   } else {
-    payload = {...post};
+    payload = { ...post };
   }
-  
+
   payload.id = await DB.createPost(payload);
   dispatch({ type: CREATE_POST, payload });
 };

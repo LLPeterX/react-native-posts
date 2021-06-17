@@ -33,13 +33,39 @@ export class DB {
     return new Promise((resolve, reject) => {
       db.transaction((tx) => {
         tx.executeSql(
-          'INSERT INTO posts (img, text, date, 0) VALUES (?,?,?)',
-          [img, text, date], // arguments
+          'INSERT INTO posts (img, text, date, booked) VALUES (?,?,?,?)',
+          [img, text, date, 0], // arguments
           (_, result) => resolve(result.insertId), // callback from promise with array of items
           (_, error) => reject(error) // callback from promise
         );
       });
-    })
+    });
+  }
+
+  static updatePost(post) {
+    return new Promise((resolve, reject) => {
+      db.transaction((tx) => {
+        tx.executeSql(
+          'UPDATE posts SET booked=? WHERE id= ?',
+          [post.bookled ? 0 : 1, post.id], // arguments
+          resolve, // callback from promise
+          (_, error) => reject(error)
+        );
+      });
+    });
+  }
+
+  static deletePost(id) {
+    return new Promise((resolve, reject) => {
+      db.transaction((tx) => {
+        tx.executeSql(
+          'DELETE FROM posts WHERE id= ?',
+          [id],
+          resolve, 
+          (_, error) => reject(error)
+        );
+      });
+    });
   }
 
 } // class DB
